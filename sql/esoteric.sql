@@ -77,6 +77,13 @@ INSERT INTO `states` (`code`, `name`) VALUES
 	('WY', 'Wyoming');
 /*!40000 ALTER TABLE `states` ENABLE KEYS */;
 
+-- Dumping structure for view numer_test.states_with_esoterica
+-- Creating temporary table to overcome VIEW dependency errors
+CREATE TABLE `states_with_esoterica` (
+	`NAME` VARCHAR(50) NULL COLLATE 'latin1_swedish_ci',
+	`code` VARCHAR(50) NULL COLLATE 'latin1_swedish_ci',
+	`numerology(name)` SMALLINT(6) NULL
+) ENGINE=MyISAM;
 
 -- Dumping structure for function numer_test.numerology
 DELIMITER //
@@ -214,6 +221,11 @@ BEGIN
 
 END//
 DELIMITER ;
+
+-- Dumping structure for view numer_test.states_with_esoterica
+-- Removing temporary table and create final VIEW structure
+DROP TABLE IF EXISTS `states_with_esoterica`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `states_with_esoterica` AS select `states`.`name` AS `NAME`,`states`.`code` AS `code`,`numerology`(`states`.`name`) AS `numerology(name)` from `states`;
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
